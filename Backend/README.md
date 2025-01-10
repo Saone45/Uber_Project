@@ -152,3 +152,70 @@ curl -X POST http://localhost:5000/user/login \
     "password": "password123"
   }'
 ```
+
+## User Profile
+
+### GET /users/profile
+
+#### Description
+Retrieve the profile information of the authenticated user.
+
+#### Responses
+
+##### Success Response
+- **Code**: 200 OK
+```json
+{
+  "_id": "USER_ID",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john@example.com"
+}
+```
+
+##### Error Responses
+- **Code**: 401 Unauthorized
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+#### Sample Request
+```bash
+curl -X GET http://localhost:5000/users/profile \
+  -H "Authorization: Bearer JWT_TOKEN_STRING"
+```
+
+## User Logout
+
+### GET /users/logout
+
+#### Description
+Logout the authenticated user.
+
+#### Responses
+
+##### Success Response
+- **Code**: 200 OK
+```json
+{
+  "message": "logged out"
+}
+```
+
+##### Error Responses
+- **Code**: 401 Unauthorized
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+#### Sample Request
+```bash
+curl -X GET http://localhost:5000/users/logout \
+  -H "Authorization: Bearer JWT_TOKEN_STRING"
+```
