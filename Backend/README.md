@@ -77,3 +77,78 @@ curl -X POST http://localhost:5000/user/register \
     "password": "password123"
   }'
 ```
+
+## User Login
+
+### POST /user/login
+
+#### Description
+Logs in an existing user with the provided credentials.
+
+#### Request Body
+```json
+{
+  "email": "string",          // Required, valid email format
+  "password": "string"        // Required, min length: 6
+}
+```
+
+#### Validation Rules
+- `email`: Required, must be a valid email format
+- `password`: Required, minimum 6 characters
+
+#### Responses
+
+##### Success Response
+- **Code**: 200 OK
+```json
+{
+  "token": "JWT_TOKEN_STRING",
+  "user": {
+    "_id": "USER_ID",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john@example.com"
+  }
+}
+```
+
+##### Error Responses
+- **Code**: 400 Bad Request
+```json
+{
+  "error": [
+    {
+      "msg": "Invalid Email",
+      "param": "email",
+      "location": "body"
+    }
+  ]
+}
+```
+
+- **Code**: 401 Unauthorized
+```json
+{
+  "error": "Invalid credentials"
+}
+```
+
+- **Code**: 500 Internal Server Error
+```json
+{
+  "error": "Internal Server Error"
+}
+```
+
+#### Sample Request
+```bash
+curl -X POST http://localhost:5000/user/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "john.doe@example.com",
+    "password": "password123"
+  }'
+```

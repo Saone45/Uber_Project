@@ -28,3 +28,35 @@ module.exports.registerUser = async (req, res) => {
 
   res.status(201).json({ token, user });
 };
+
+// login User -->
+module.exports.loginUser = async (req, res) => {
+  // if error occurs
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res.status(400).json({ error: error.array() });
+  }
+
+  // bringing email and password from body
+  const { email, password } = req.body;
+
+  const user = await userModel.findOne({ email }).select("+password");
+
+  // if user not found -->
+  if (!user) {
+    return res.status(401).json({ message: "Invalid email or password" });
+  }
+
+  // Matching  Password -->
+  const isMatch = await user.comparePassword(password);
+
+  // if password not found -->
+  if (!isMatch) {
+    return res.status(401).json({ message: "Invalid email or password" });
+  }
+
+  /// generating token -->
+  const token = user.generateAuthToken();
+
+  res.status(200).json({ token, user });
+};
