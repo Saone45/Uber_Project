@@ -2,6 +2,7 @@ const express = require("express");
 const { body } = require("express-validator");
 const captainController = require("../controller/captainController");
 const router = express.Router();
+const authMiddleware = require("../middleware/authMiddleware");
 
 /// reqister route -->
 router.post(
@@ -31,6 +32,32 @@ router.post(
       .withMessage("Invalid vehicle type"),
   ],
   captainController.reqisterCaptain
+);
+
+//// login route -->
+router.post(
+  "/login",
+  [
+    body("email").isEmail().withMessage("Invalid Email"),
+    body("password")
+      .isLength({ min: 6 })
+      .withMessage("vehicle plate must be at least 4 character"),
+  ],
+  captainController.loginCaptain
+);
+
+/// getCaptain profile -->
+router.get(
+  "/profile",
+  authMiddleware.authCaptain,
+  captainController.getCaptainProfile
+);
+
+/// Caption logout -->
+router.get(
+  "/logout",
+  authMiddleware.authCaptain,
+  captainController.logOutCaptain
 );
 
 module.exports = router;

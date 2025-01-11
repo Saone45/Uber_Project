@@ -177,6 +177,82 @@ curl -X POST http://localhost:5000/captains/register \
   }'
 ```
 
+## Captain Login
+
+### POST /captains/login
+
+#### Description
+Logs in an existing captain with the provided credentials.
+
+#### Request Body
+```json
+{
+  "email": "string",          // Required, valid email format
+  "password": "string"        // Required, min length: 6
+}
+```
+
+#### Validation Rules
+- `email`: Required, must be a valid email format
+- `password`: Required, minimum 6 characters
+
+#### Responses
+
+##### Success Response
+- **Code**: 200 OK
+```json
+{
+  "token": "JWT_TOKEN_STRING",
+  "captain": {
+    "_id": "CAPTAIN_ID",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john@example.com"
+  },
+  "message": "login Successful"
+}
+```
+
+##### Error Responses
+- **Code**: 400 Bad Request
+```json
+{
+  "error": [
+    {
+      "msg": "Invalid Email",
+      "param": "email",
+      "location": "body"
+    }
+  ]
+}
+```
+
+- **Code**: 401 Unauthorized
+```json
+{
+  "error": "Invalid credentials"
+}
+```
+
+- **Code**: 500 Internal Server Error
+```json
+{
+  "error": "Internal Server Error"
+}
+```
+
+#### Sample Request
+```bash
+curl -X POST http://localhost:5000/captains/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "john.doe@example.com",
+    "password": "password123"
+  }'
+```
+
 ## User Login
 
 ### POST /user/login
@@ -288,6 +364,50 @@ curl -X GET http://localhost:5000/users/profile \
   -H "Authorization: Bearer JWT_TOKEN_STRING"
 ```
 
+## Captain Profile
+
+### GET /captains/profile
+
+#### Description
+Retrieve the profile information of the authenticated captain.
+
+#### Responses
+
+##### Success Response
+- **Code**: 200 OK
+```json
+{
+  "captain": {
+    "_id": "CAPTAIN_ID",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john@example.com",
+    "vehicle": {
+      "color": "red",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+##### Error Responses
+- **Code**: 401 Unauthorized
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+#### Sample Request
+```bash
+curl -X GET http://localhost:5000/captains/profile \
+  -H "Authorization: Bearer JWT_TOKEN_STRING"
+```
+
 ## User Logout
 
 ### GET /users/logout
@@ -316,5 +436,36 @@ Logout the authenticated user.
 #### Sample Request
 ```bash
 curl -X GET http://localhost:5000/users/logout \
+  -H "Authorization: Bearer JWT_TOKEN_STRING"
+```
+
+## Captain Logout
+
+### GET /captains/logout
+
+#### Description
+Logout the authenticated captain.
+
+#### Responses
+
+##### Success Response
+- **Code**: 200 OK
+```json
+{
+  "message": "Logout successful"
+}
+```
+
+##### Error Responses
+- **Code**: 401 Unauthorized
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+#### Sample Request
+```bash
+curl -X GET http://localhost:5000/captains/logout \
   -H "Authorization: Bearer JWT_TOKEN_STRING"
 ```
