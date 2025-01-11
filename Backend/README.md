@@ -78,6 +78,105 @@ curl -X POST http://localhost:5000/user/register \
   }'
 ```
 
+## Captain Registration
+
+### POST /captains/register
+
+#### Description
+Registers a new captain in the system with the provided information.
+
+#### Request Body
+```json
+{
+  "fullname": {
+    "firstname": "string",     // Required, min length: 3
+    "lastname": "string"       // Required, min length: 3
+  },
+  "email": "string",          // Required, valid email format
+  "password": "string",       // Required, min length: 6
+  "vehicle": {
+    "color": "string",        // Required, min length: 3
+    "plate": "string",        // Required, min length: 4
+    "capacity": "number",     // Required, min value: 1
+    "vehicleType": "string"   // Required, must be one of ["car", "motorcycle", "auto"]
+  }
+}
+```
+
+#### Validation Rules
+- `fullname.firstname`: Required, minimum 3 characters
+- `fullname.lastname`: Required, minimum 3 characters
+- `email`: Required, must be a valid email format
+- `password`: Required, minimum 6 characters
+- `vehicle.color`: Required, minimum 3 characters
+- `vehicle.plate`: Required, minimum 4 characters
+- `vehicle.capacity`: Required, minimum 1
+- `vehicle.vehicleType`: Required, must be one of ["car", "motorcycle", "auto"]
+
+#### Responses
+
+##### Success Response
+- **Code**: 201 Created
+```json
+{
+  "captain": {
+    "_id": "CAPTAIN_ID",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john@example.com",
+    "vehicle": {
+      "color": "red",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+##### Error Responses
+- **Code**: 400 Bad Request
+```json
+{
+  "error": [
+    {
+      "msg": "First name must be at least 3 character long",
+      "param": "fullname.firstname",
+      "location": "body"
+    }
+  ]
+}
+```
+
+- **Code**: 500 Internal Server Error
+```json
+{
+  "error": "Internal Server Error"
+}
+```
+
+#### Sample Request
+```bash
+curl -X POST http://localhost:5000/captains/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "password": "password123",
+    "vehicle": {
+      "color": "red",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }'
+```
+
 ## User Login
 
 ### POST /user/login
@@ -151,7 +250,7 @@ curl -X POST http://localhost:5000/user/login \
     "email": "john.doe@example.com",
     "password": "password123"
   }'
-```
+``` 
 
 ## User Profile
 
